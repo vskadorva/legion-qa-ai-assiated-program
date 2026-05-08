@@ -1,0 +1,18 @@
+{
+  "name": "legion-qa-ai-assiated-program",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@playwright/test": "^1.59.1"
+  },
+  "devDependencies": {
+    "cypress": "^15.14.2"
+  }
+}
