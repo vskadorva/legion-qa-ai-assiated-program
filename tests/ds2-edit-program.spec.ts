@@ -1,4 +1,5 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect } from '../fixtures/cleanup.fixture';
+import type { Page } from '@playwright/test';
 
 const BASE_URL = process.env.DIDAXIS_URL!;
 
@@ -14,7 +15,7 @@ async function createProgram(page: Page, programName: string, description: strin
   await expect(page.getByRole('dialog', { name: 'New Program' })).toBeVisible();
   await page.getByRole('textbox', { name: 'Program Name' }).fill(programName);
   await page.getByRole('textbox', { name: 'Description' }).fill(description);
-  await page.getByRole('button', { name: 'Create' }).click();
+  await page.getByRole('dialog', { name: 'New Program' }).getByRole('button', { name: 'Create' }).click();
 
   await expect(page.getByRole('dialog', { name: 'New Program' })).not.toBeVisible();
   await expect(page.getByText(programName)).toBeVisible();

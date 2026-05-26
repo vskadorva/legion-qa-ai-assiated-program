@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../fixtures/cleanup.fixture";
 
 const BASE_URL = process.env.DIDAXIS_URL!;
 
@@ -46,7 +46,7 @@ test.describe("Didaxis — Create Program", () => {
     await page
       .getByRole("textbox", { name: "Description" })
       .fill("Full-stack web development program");
-    await page.getByRole("button", { name: "Create" }).click();
+    await page.getByRole("dialog", { name: "New Program" }).getByRole("button", { name: "Create" }).click();
 
     await expect(
       page.getByRole("dialog", { name: "New Program" }),
