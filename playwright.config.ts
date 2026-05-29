@@ -1,5 +1,6 @@
 import { defineConfig } from '@playwright/test';
 import dotenv from 'dotenv';
+import { AUTH_FILE } from './support/auth.constants';
 
 dotenv.config();
 
@@ -17,4 +18,22 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     trace: 'on',
   },
+  projects: [
+    {
+      name: 'setup',
+      testMatch: /auth\.setup\.ts/,
+    },
+    {
+      name: 'didaxis',
+      testMatch: /ds\d.*\.spec\.ts/,
+      use: {
+        storageState: AUTH_FILE,
+      },
+      dependencies: ['setup'],
+    },
+    {
+      name: 'todomvc',
+      testMatch: /(positive|negative|edge)-flows\.spec\.ts/,
+    },
+  ],
 });
