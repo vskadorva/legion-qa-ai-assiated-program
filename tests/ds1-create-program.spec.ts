@@ -13,7 +13,7 @@ test.describe('Didaxis — Create Program', () => {
     await expect(modal.descriptionInput).toBeVisible();
     await expect(modal.createButton).toBeVisible();
   });
-
+  //todo: create a program with valid data, use Date.now() to make the program name unique  
   test('TC-002: Successfully create a program with valid data', async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Web Development 2026 ${Date.now()}`;
