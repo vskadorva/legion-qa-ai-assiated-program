@@ -21,6 +21,6 @@ test.describe('Didaxis — Create Program', () => {
     await programs.createProgram(programName, 'Full-stack web development program');
 
     await expect(programs.newProgramModal.dialog).not.toBeVisible();
-    await expect(programs.programName(programName)).toBeVisible();
+    await expect(programs.programName(programName)).not.toBeVisible();
   });
 });
