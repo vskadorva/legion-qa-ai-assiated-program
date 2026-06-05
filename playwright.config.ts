@@ -25,7 +25,7 @@ export default defineConfig({
     },
     {
       name: 'didaxis',
-      testMatch: /ds\d.*\.spec\.ts/,
+      testMatch: '**/ds*.spec.ts',
       use: {
         storageState: AUTH_FILE,
       },
@@ -33,7 +33,8 @@ export default defineConfig({
     },
     {
       name: 'todomvc',
-      testMatch: /(positive|negative|edge)-flows\.spec\.ts/,
+      testMatch: '**/*.spec.ts',
+      testIgnore: [/auth\.setup\.ts/, '**/ds*.spec.ts'],
     },
   ],
 });
