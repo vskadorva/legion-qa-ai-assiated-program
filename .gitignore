@@ -3,6 +3,7 @@ playwright/.auth/
 .test-artifacts/
 test-results/
 playwright-report/
+playwright-report-gha/
 blob-report/
 features/
 .DS_Store
