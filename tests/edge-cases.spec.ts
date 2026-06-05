@@ -140,7 +140,7 @@ test.describe("Edge Cases", () => {
     await editInput.fill("Buy organic groceries");
     await editInput.press("Enter");
 
-    await expect(todoItem).toContainText("Buy organic grcoeries");
+    await expect(todoItem).toContainText("Buy organic groceries");
     await expect(todoItem.getByRole("textbox")).not.toBeVisible();
   });
 
