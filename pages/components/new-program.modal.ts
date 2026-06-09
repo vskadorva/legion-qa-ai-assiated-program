@@ -35,4 +35,8 @@ export class NewProgramModal {
   async cancel() {
     await this.cancelButton.click();
   }
+
+  duplicateNameError() {
+    return this.dialog.getByText(/already exists|duplicate|name.*taken/i);
+  }
 }
