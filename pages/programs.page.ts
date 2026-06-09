@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test';
 import { BasePage } from './base.page';
 import { AppNavigation } from './components/app-navigation';
+import { DeleteProgramConfirmModal } from './components/delete-program-confirm.modal';
 import { EditProgramModal } from './components/edit-program.modal';
 import { NewProgramModal } from './components/new-program.modal';
 
@@ -11,6 +12,7 @@ export class ProgramsPage extends BasePage {
   readonly programColumnHeader;
   readonly newProgramModal: NewProgramModal;
   readonly editProgramModal: EditProgramModal;
+  readonly deleteProgramConfirmModal: DeleteProgramConfirmModal;
   readonly navigation: AppNavigation;
 
   constructor(page: Page) {
@@ -21,6 +23,7 @@ export class ProgramsPage extends BasePage {
     this.programColumnHeader = page.getByRole('columnheader', { name: 'Program' });
     this.newProgramModal = new NewProgramModal(page);
     this.editProgramModal = new EditProgramModal(page);
+    this.deleteProgramConfirmModal = new DeleteProgramConfirmModal(page);
     this.navigation = new AppNavigation(page);
   }
 
@@ -41,7 +44,7 @@ export class ProgramsPage extends BasePage {
   }
 
   deleteButtonFor(programName: string) {
-    return this.page.getByRole('button', { name: `Delete ${programName}` });
+    return this.programRow(programName).getByRole('button', { name: `Delete ${programName}` });
   }
 
   allEditButtons() {
@@ -73,5 +76,25 @@ export class ProgramsPage extends BasePage {
     } else {
       await editButton.click();
     }
+  }
+
+  async openDeleteFor(programName: string, opts?: { skipGoto?: boolean }) {
+    if (!opts?.skipGoto) {
+      await this.goto();
+    }
+    await this.programName(programName).first().waitFor({ state: 'visible', timeout: 25000 });
+    const row = this.programRow(programName);
+    await row.scrollIntoViewIfNeeded();
+    await this.deleteButtonFor(programName).click();
+  }
+
+  async confirmDelete(programName: string, opts?: { skipGoto?: boolean }) {
+    this.deleteProgramConfirmModal.listenForAccept();
+    await this.openDeleteFor(programName, opts);
+  }
+
+  async cancelDelete(programName: string, opts?: { skipGoto?: boolean }) {
+    this.deleteProgramConfirmModal.listenForDismiss();
+    await this.openDeleteFor(programName, opts);
   }
 }
