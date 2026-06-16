@@ -109,3 +109,36 @@ export async function deleteAllPrograms(): Promise<DeleteProgramResult[]> {
 
   return deleteProgramsByIds(programIds);
 }
+
+export async function createProgramViaApi(
+  name: string,
+  description: string,
+): Promise<string> {
+  const config = getConfig();
+  if (!config) {
+    throw new Error('DIDAXIS_API_TOKEN or DIDAXIS_URL is not set in .env');
+  }
+
+  const response = await fetch(`${config.baseUrl}/api/programs`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${config.token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name, description }),
+  });
+
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`Failed to create program: ${response.status} ${body}`);
+  }
+
+  const body = await response.json();
+  const id = body?.data?.id;
+
+  if (typeof id !== 'string' || id.length === 0) {
+    throw new Error('Unexpected POST /api/programs response shape');
+  }
+
+  return id;
+}

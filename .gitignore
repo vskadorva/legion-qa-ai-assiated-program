@@ -9,3 +9,5 @@ features/
 .DS_Store
 .env
 .playwright-mcp/
+data/
+trace/
