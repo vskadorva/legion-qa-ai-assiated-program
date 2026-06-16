@@ -9,6 +9,7 @@ export class ProgramsPage extends BasePage {
   readonly heading;
   readonly newProgramButton;
   readonly createProgramEmptyButton;
+  readonly emptyStateMessage;
   readonly programColumnHeader;
   readonly newProgramModal: NewProgramModal;
   readonly editProgramModal: EditProgramModal;
@@ -20,6 +21,7 @@ export class ProgramsPage extends BasePage {
     this.heading = page.getByRole('heading', { name: 'Programs' });
     this.newProgramButton = page.getByRole('button', { name: '+ New Program' });
     this.createProgramEmptyButton = page.getByRole('button', { name: 'Create Program' });
+    this.emptyStateMessage = page.getByText(/no programs/i);
     this.programColumnHeader = page.getByRole('columnheader', { name: 'Program' });
     this.newProgramModal = new NewProgramModal(page);
     this.editProgramModal = new EditProgramModal(page);
@@ -39,6 +41,14 @@ export class ProgramsPage extends BasePage {
     return this.page.getByRole('row').filter({ has: this.page.getByText(programName, { exact: true }) }).first();
   }
 
+  programDescription(programName: string, description: string) {
+    return this.programRow(programName).getByText(description, { exact: true });
+  }
+
+  programDataRows() {
+    return this.page.getByRole('row').filter({ has: this.page.getByRole('button', { name: /^Edit / }) });
+  }
+
   editButtonFor(programName: string) {
     return this.programRow(programName).getByRole('button', { name: `Edit ${programName}` });
   }
@@ -53,6 +63,10 @@ export class ProgramsPage extends BasePage {
 
   async openNewProgram() {
     await this.newProgramButton.click();
+  }
+
+  async openCreateFromEmptyState() {
+    await this.createProgramEmptyButton.click();
   }
 
   async createProgram(programName: string, description: string) {
