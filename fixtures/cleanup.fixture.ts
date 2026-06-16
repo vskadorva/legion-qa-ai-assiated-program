@@ -29,7 +29,7 @@ export const test = base.extend({
       try {
         const body = await response.json();
         const id = body?.data?.id;
-        if (typeof id === 'string' && id.length > 0) {
+        if (typeof id === 'string' && id.length > 0 && !id.startsWith('mock-')) {
           trackProgram(id);
         }
       } catch {
