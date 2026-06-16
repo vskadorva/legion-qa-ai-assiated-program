@@ -9,14 +9,19 @@ export default defineConfig({
   globalSetup: './support/global-setup.ts',
   globalTeardown: './support/global-teardown.ts',
   timeout: 30000,
+  fullyParallel: true,
+  retries: process.env.CI ? 2 : 0,
   reporter: [
     ['./support/program-cleanup-reporter.ts'],
     ['html', { open: 'never' }],
   ],
   use: {
+    baseURL: process.env.DIDAXIS_URL,
     headless: true,
     screenshot: 'only-on-failure',
-    trace: 'on',
+    trace: 'on-first-retry',
+    locale: 'en-CA',
+    timezoneId: 'America/Toronto',
   },
   projects: [
     {

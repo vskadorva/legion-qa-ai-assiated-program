@@ -1,18 +1,10 @@
-import { test, expect, trackProgram } from '../fixtures/cleanup.fixture';
+import { test, expect } from '../fixtures/cleanup.fixture';
 import { DashboardPage } from '../pages/dashboard.page';
 import { ProgramsPage } from '../pages/programs.page';
 import {
-  createProgramViaApi,
-  deleteAllPrograms,
-} from '../support/delete-program';
-
-async function restoreSeedProgram(): Promise<void> {
-  const id = await createProgramViaApi(
-    `Restore Seed ${Date.now()}`,
-    'Restored after empty-state test',
-  );
-  trackProgram(id);
-}
+  mockEmptyProgramsList,
+  mockMutableProgramsApi,
+} from '../support/mock-programs-api';
 
 test.describe('Didaxis — Program List Display (DS-5)', () => {
   test('TC-001: Display program list with key details (AC-1)', async ({ page }) => {
@@ -52,61 +44,45 @@ test.describe('Didaxis — Program List Display (DS-5)', () => {
     await expect(programs.deleteButtonFor(nursingName)).toBeVisible();
   });
 
-  test.describe('Empty state (serial)', () => {
-    test.describe.configure({ mode: 'serial' });
+  test('TC-003: Empty state when no programs exist (AC-2)', async ({ page }) => {
+    const programs = new ProgramsPage(page);
 
-    test('TC-003: Empty state when no programs exist (AC-2)', async ({ page }) => {
-      const programs = new ProgramsPage(page);
+    await mockEmptyProgramsList(page);
+    await programs.goto();
 
-      await deleteAllPrograms();
-      try {
-        await programs.goto();
+    await expect(programs.emptyStateMessage).toBeVisible();
+    await expect(programs.createProgramEmptyButton).toBeVisible();
+    await expect(programs.programColumnHeader).not.toBeVisible();
+    await expect(programs.programDataRows()).toHaveCount(0);
+  });
 
-        await expect(programs.emptyStateMessage).toBeVisible();
-        await expect(programs.createProgramEmptyButton).toBeVisible();
-        await expect(programs.programColumnHeader).not.toBeVisible();
-        await expect(programs.programDataRows()).toHaveCount(0);
-      } finally {
-        await restoreSeedProgram();
-      }
-    });
+  test('TC-004: Empty-state Create Program button opens the new program modal (AC-2)', async ({
+    page,
+  }) => {
+    const programs = new ProgramsPage(page);
 
-    test('TC-004: Empty-state Create Program button opens the new program modal (AC-2)', async ({
-      page,
-    }) => {
-      const programs = new ProgramsPage(page);
+    await mockEmptyProgramsList(page);
+    await programs.goto();
+    await programs.openCreateFromEmptyState();
 
-      await deleteAllPrograms();
-      try {
-        await programs.goto();
-        await programs.openCreateFromEmptyState();
+    const modal = programs.newProgramModal;
+    await expect(modal.dialog).toBeVisible();
+    await expect(modal.programNameInput).toBeVisible();
+    await expect(modal.descriptionInput).toBeVisible();
+  });
 
-        const modal = programs.newProgramModal;
-        await expect(modal.dialog).toBeVisible();
-        await expect(modal.programNameInput).toBeVisible();
-        await expect(modal.descriptionInput).toBeVisible();
-      } finally {
-        await restoreSeedProgram();
-      }
-    });
+  test('TC-005: Programs page does not show stale data after last program is deleted', async ({
+    page,
+  }) => {
+    const programs = new ProgramsPage(page);
+    const programName = `Transient Program ${Date.now()}`;
 
-    test('TC-005: Programs page does not show stale data after last program is deleted', async ({
-      page,
-    }) => {
-      const programs = new ProgramsPage(page);
-      const programName = `Transient Program ${Date.now()}`;
+    await mockMutableProgramsApi(page);
+    await programs.createProgram(programName, 'Single program removed to reach empty state');
+    await programs.confirmDelete(programName, { skipGoto: true });
 
-      await deleteAllPrograms();
-      try {
-        await programs.createProgram(programName, 'Single program removed to reach empty state');
-        await programs.confirmDelete(programName, { skipGoto: true });
-
-        await expect(programs.emptyStateMessage).toBeVisible();
-        await expect(programs.programName(programName)).toHaveCount(0);
-      } finally {
-        await restoreSeedProgram();
-      }
-    });
+    await expect(programs.emptyStateMessage).toBeVisible();
+    await expect(programs.programName(programName)).toHaveCount(0);
   });
 
   test('TC-006: Empty state is not shown when programs exist', async ({ page }) => {
