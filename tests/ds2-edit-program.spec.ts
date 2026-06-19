@@ -2,7 +2,7 @@ import { test, expect } from '../fixtures/cleanup.fixture';
 import { LoginPage } from '../pages/login.page';
 import { ProgramsPage } from '../pages/programs.page';
 
-test.describe('Didaxis — Edit Program (authenticated)', () => {
+test.describe('Didaxis — Edit Program (DS-2)', () => {
   test('TC-001: Open program for editing via edit icon', async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Web Development ${Date.now()}`;
