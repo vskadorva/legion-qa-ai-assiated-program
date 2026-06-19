@@ -11,3 +11,4 @@ features/
 .playwright-mcp/
 data/
 trace/
+Course docs/
