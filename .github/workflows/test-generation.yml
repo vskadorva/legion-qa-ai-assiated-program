@@ -25,6 +25,9 @@ jobs:
       DIDAXIS_EMAIL: ${{ secrets.DIDAXIS_EMAIL }}
       DIDAXIS_PASSWORD: ${{ secrets.DIDAXIS_PASSWORD }}
       DIDAXIS_API_TOKEN: ${{ secrets.DIDAXIS_API_TOKEN }}
+      ATLASSIAN_BASE_URL: ${{ secrets.ATLASSIAN_BASE_URL }}
+      ATLASSIAN_EMAIL: ${{ secrets.ATLASSIAN_EMAIL }}
+      JIRA_PROJECT_KEY: ${{ secrets.JIRA_PROJECT_KEY }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -65,7 +68,7 @@ jobs:
           Budget: process at most 5 tickets this run. Never merge any pull request.
 
           For each ticket (up to the budget):
-          1. Analyze the ticket acceptance criteria (use Atlassian/Jira with ATLASSIAN_API_TOKEN).
+          1. Analyze the ticket acceptance criteria (use Jira REST API with ATLASSIAN_EMAIL + ATLASSIAN_API_TOKEN against ATLASSIAN_BASE_URL; project key JIRA_PROJECT_KEY).
           2. Write a conforming Playwright spec under tests/ following .cursor/rules/playwright-conventions.mdc, the pom-conventions skill, and the api-cleanup skill. Use Page Object Models from pages/; do not modify application source.
           3. Run the spec: npx playwright test <spec-path>
           4. If the run is green, open a pull request linked to the Jira ticket (reference the ticket key in the branch name, commit message, and PR title/body). Add the label tests-generated to the PR via gh.
