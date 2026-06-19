@@ -3,7 +3,7 @@ name: Test Generation
 on:
   schedule:
     # 9:00 PM EST Mon–Fri (02:00 UTC; EST = UTC-5)
-    - cron: '0 2 * * 1-5'
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 permissions:
