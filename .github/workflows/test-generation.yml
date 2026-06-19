@@ -2,9 +2,13 @@ name: Test Generation
 
 on:
   schedule:
-    # 9:00 PM EST Mon–Fri (02:00 UTC; EST = UTC-5)
+    # Every 5 minutes (GitHub Actions minimum interval)
     - cron: '*/5 * * * *'
   workflow_dispatch:
+
+concurrency:
+  group: test-generation
+  cancel-in-progress: false
 
 permissions:
   contents: write
