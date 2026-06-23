@@ -8,8 +8,8 @@ export class NewProgramModal {
   readonly cancelButton;
 
   constructor(page: Page) {
-    this.dialog = page.locator('div').filter({ hasText: 'New Program' });
-    this.programNameInput = page.locator('input').filter({ hasAttribute: 'placeholder', hasValue: 'e.g. Computer Engineering' });
+    this.dialog = page.getByRole('dialog', { name: 'New Program' });
+    this.programNameInput = this.dialog.getByRole('textbox', { name: 'Program Name' });
     this.descriptionInput = this.dialog.getByRole('textbox', { name: 'Description' });
     this.createButton = this.dialog.getByRole('button', { name: 'Create', exact: true });
     this.cancelButton = this.dialog.getByRole('button', { name: 'Cancel' });
