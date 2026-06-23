@@ -99,7 +99,7 @@ test.describe('Didaxis — Program List Display (DS-5)', () => {
 
   test('TC-007: Program with long name and description displays in the list', async ({ page }) => {
     const programs = new ProgramsPage(page);
-    const programName = `Long Program ${'A'.repeat(88)}${Date.now()}`.slice(0, 100);
+    const programName = `${Date.now()}-${'A'.repeat(80)}`.slice(0, 100);
     const description =
       'This is a multi-sentence description spanning several clauses. It documents labs, workshops, and co-op placements.';
 

@@ -40,7 +40,7 @@ export class ProgramsPage extends BasePage {
   }
 
   programName(name: string) {
-    return this.page.getByText(name, { exact: true });
+    return this.programDataRows().getByText(name, { exact: true });
   }
 
   programRow(programName: string) {
