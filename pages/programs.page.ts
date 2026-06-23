@@ -56,7 +56,7 @@ export class ProgramsPage extends BasePage {
   }
 
   semesterPanel() {
-    return this.page.locator('div').filter({ has: this.semestersHeading }).last();
+    return this.page.locator('section').filter({ has: this.semestersHeading }).last();
   }
 
   semesterPanelProgramName(programName: string) {
