@@ -21,6 +21,10 @@ export class AppNavigation {
     this.signOutButton = page.getByRole('button', { name: 'Sign out' });
   }
 
+  async goToDashboard() {
+    await this.dashboardButton.click();
+  }
+
   async goToPrograms() {
     await this.programsButton.click();
   }

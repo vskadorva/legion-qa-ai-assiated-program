@@ -1,22 +1,16 @@
 import type { Page, Locator } from '@playwright/test';
 
-/**
- * Dashboard stat cards lack button/link roles; scope to the SimpleGrid container
- * so card titles stay unique (Quick Start copy also mentions Calendar, etc.).
- */
 export class DashboardCards {
-  readonly grid: Locator;
   readonly programsCard: Locator;
   readonly calendarCard: Locator;
   readonly validationCard: Locator;
   readonly aiAssistCard: Locator;
 
   constructor(private readonly page: Page) {
-    this.grid = page.locator('.mantine-SimpleGrid-root');
-    this.programsCard = this.grid.getByText('Programs', { exact: true });
-    this.calendarCard = this.grid.getByText('Calendar', { exact: true });
-    this.validationCard = this.grid.getByText('Validation', { exact: true });
-    this.aiAssistCard = this.grid.getByText('AI Assist', { exact: true });
+    this.programsCard = page.getByText('Programs', { exact: true });
+    this.calendarCard = page.getByText('Calendar', { exact: true });
+    this.validationCard = page.getByText('Validation', { exact: true });
+    this.aiAssistCard = page.getByText('AI Assist', { exact: true });
   }
 
   async openPrograms() {
