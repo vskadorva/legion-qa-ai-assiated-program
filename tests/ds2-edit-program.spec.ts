@@ -3,7 +3,7 @@ import { LoginPage } from '../pages/login.page';
 import { ProgramsPage } from '../pages/programs.page';
 
 test.describe('Didaxis — Edit Program (DS-2)', () => {
-  test('TC-001: Open program for editing via edit icon', async ({ page }) => {
+  test('TC-001: Open program for editing via edit icon', { tag: '@smoke' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Web Development ${Date.now()}`;
     const description = `Full‑stack syllabus seed ${Date.now()}`;
@@ -18,7 +18,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(modal.saveButton).toBeVisible();
   });
 
-  test('TC-002: Successfully update program Name and reflect in list immediately', async ({ page }) => {
+  test('TC-002: Successfully update program Name and reflect in list immediately', { tag: '@smoke' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Web Development Anchor ${Date.now()}`;
     const updated = `${programName} - Updated`;
@@ -35,7 +35,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(programs.programName(programName)).toHaveCount(0);
   });
 
-  test('TC-003: Updating only Description preserves Program Name', async ({ page }) => {
+  test('TC-003: Updating only Description preserves Program Name', { tag: '@e2e' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Applied AI ${Date.now()}`;
     const originalDescription = `Original description ${Date.now()}`;
@@ -54,7 +54,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(programs.editProgramModal.descriptionInput).toHaveValue(newDescription);
   });
 
-  test('TC-004: Update Program Name while leaving Description unchanged', async ({ page }) => {
+  test('TC-004: Update Program Name while leaving Description unchanged', { tag: '@e2e' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Course Catalog Pilot ${Date.now()}`;
     const descriptionBody = `Non‑empty syllabus blurb ${Date.now()}`;
@@ -73,7 +73,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(programs.editProgramModal.descriptionInput).toHaveValue(descriptionBody);
   });
 
-  test('TC-005: Edited details persist after page refresh', async ({ page }) => {
+  test('TC-005: Edited details persist after page refresh', { tag: '@e2e' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const startedAs = `Staging Alpha ${Date.now()}`;
     const savedAs = `Staging Beta ${Date.now()}`;
@@ -90,7 +90,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(programs.programName(savedAs)).toBeVisible();
   });
 
-  test('TC-006: Latest Description values load when modal reopens', async ({ page }) => {
+  test('TC-006: Latest Description values load when modal reopens', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Labs Program ${Date.now()}`;
 
@@ -110,7 +110,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(programs.editProgramModal.descriptionInput).toHaveValue('final authoritative revision');
   });
 
-  test('TC-007: Save disabled when Program Name empty or whitespace only', async ({ page }) => {
+  test('TC-007: Save disabled when Program Name empty or whitespace only', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Validity Guard ${Date.now()}`;
 
@@ -128,7 +128,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(modal.saveButton).toBeDisabled();
   });
 
-  test('TC-008: Cancel restores list — unsaved edits not persisted', async ({ page }) => {
+  test('TC-008: Cancel restores list — unsaved edits not persisted', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Rollback Test ${Date.now()}`;
 
@@ -145,7 +145,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
   });
 
   // Guardrail: demo app intentionally allows duplicate program names on rename.
-  test('TC-009: Renaming conflicts with existing program Name is rejected', async ({ page }) => {
+  test('TC-009: Renaming conflicts with existing program Name is rejected', { tag: '@regression' }, async ({ page }) => {
     test.skip(true, 'Known demo bug — duplicate program names are allowed on rename.');
 
     const programs = new ProgramsPage(page);
@@ -168,7 +168,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(programs.programName(physics)).toBeVisible();
   });
 
-  test('TC-012: Clearing Program Name again disables Save', async ({ page }) => {
+  test('TC-012: Clearing Program Name again disables Save', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Toggle Validation ${Date.now()}`;
 
@@ -186,7 +186,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(modal.saveButton).toBeDisabled();
   });
 
-  test('TC-013: Leading and trailing whitespace handling on edited Name', async ({ page }) => {
+  test('TC-013: Leading and trailing whitespace handling on edited Name', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const token = `${Date.now()}`;
     const seedName = `Trim Seed ${token}`;
@@ -205,7 +205,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(programs.editProgramModal.programNameInput).toHaveValue(trimmed);
   });
 
-  test('TC-014: Unicode rename renders after save', async ({ page }) => {
+  test('TC-014: Unicode rename renders after save', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Uni Seed ${Date.now()}`;
 
@@ -221,7 +221,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(programs.programName(finalName).first()).toBeVisible();
   });
 
-  test('TC-015: Rapid double-click Save does not create duplicate listings', async ({ page }) => {
+  test('TC-015: Rapid double-click Save does not create duplicate listings', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Double Save ${Date.now()}`;
 
@@ -238,7 +238,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(programs.editProgramModal.programNameInput).toHaveValue(programName);
   });
 
-  test('TC-017: Long Description saves without truncation (medium payload)', async ({ page }) => {
+  test('TC-017: Long Description saves without truncation (medium payload)', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Long Desc Sentinel ${Date.now()}`;
     const body = 'x'.repeat(900);
@@ -255,7 +255,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(programs.editProgramModal.descriptionInput).toHaveValue(body);
   });
 
-  test('TC-018: Angle-brackets in Description persist without XSS execution', async ({ page }) => {
+  test('TC-018: Angle-brackets in Description persist without XSS execution', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const dangerous = `<script>throw new Error('xss')</script>`;
     const programName = `XSS Harness ${Date.now()}`;
@@ -282,7 +282,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(programs.editProgramModal.descriptionInput).toHaveValue(dangerous);
   });
 
-  test('TC-019: Edit pencil remains clickable at narrow widths', async ({ page }) => {
+  test('TC-019: Edit pencil remains clickable at narrow widths', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Responsive Row ${Date.now()}`;
 
@@ -293,11 +293,11 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
     await expect(programs.editProgramModal.dialog).toBeVisible();
   });
 
-  test('TC-016: Concurrent admins — informational skip', async () => {
+  test('TC-016: Concurrent admins — informational skip', { tag: '@regression' }, async () => {
     test.fixme(true, 'Requires orchestrating dual authenticated contexts; backlog item for infra.');
   });
 
-  test('TC-010: Non-admin edit guard', async ({ browser }) => {
+  test('TC-010: Non-admin edit guard', { tag: '@regression' }, async ({ browser }) => {
     test.skip(!process.env.DIDAXIS_ALT_EMAIL, 'Set DIDAXIS_ALT_EMAIL & DIDAXIS_ALT_PASSWORD for a non-privileged probe user.');
     const account = process.env.DIDAXIS_ALT_EMAIL ?? '';
     const password = process.env.DIDAXIS_ALT_PASSWORD ?? '';
@@ -318,7 +318,7 @@ test.describe('Didaxis — Edit Program (DS-2)', () => {
 });
 
 test.describe('Didaxis — Edit Program (unauthenticated)', () => {
-  test('TC-011: Guests are redirected away from Programs', async ({ browser }) => {
+  test('TC-011: Guests are redirected away from Programs', { tag: '@sanity' }, async ({ browser }) => {
     const context = await browser.newContext({ storageState: { cookies: [], origins: [] } });
     const page = await context.newPage();
     const programs = new ProgramsPage(page);

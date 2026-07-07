@@ -4,7 +4,7 @@ import { ProgramsPage } from '../pages/programs.page';
 test.describe('Didaxis — Program Semester Selection (DS-6)', () => {
   test.use({ viewport: { width: 1400, height: 900 } });
 
-  test('TC-001: Selecting a program reveals the semester management panel', async ({ page }) => {
+  test('TC-001: Selecting a program reveals the semester management panel', { tag: '@e2e' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Semester Panel Program ${Date.now()}`;
 
@@ -23,7 +23,7 @@ test.describe('Didaxis — Program Semester Selection (DS-6)', () => {
     await expect(programs.semesterPanelProgramName(programName)).toBeVisible();
   });
 
-  test('TC-002: Switching program selection updates the semester panel context', async ({ page }) => {
+  test('TC-002: Switching program selection updates the semester panel context', { tag: '@e2e' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const suffix = Date.now();
     const alpha = `Semester Alpha ${suffix}`;

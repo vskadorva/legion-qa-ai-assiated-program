@@ -14,7 +14,7 @@ test.describe('Negative Flows', () => {
     await page.goto(APP_URL);
   });
 
-  test('TC-010: Empty input does not create a todo', async ({ page }) => {
+  test('TC-010: Empty input does not create a todo', { tag: '@regression' }, async ({ page }) => {
     const input = page.getByPlaceholder('What needs to be done?');
     await input.press('Enter');
 
@@ -22,7 +22,7 @@ test.describe('Negative Flows', () => {
     await expect(page.locator('.footer')).not.toBeVisible();
   });
 
-  test('TC-011: Whitespace-only input does not create a todo', async ({ page }) => {
+  test('TC-011: Whitespace-only input does not create a todo', { tag: '@regression' }, async ({ page }) => {
     const input = page.getByPlaceholder('What needs to be done?');
     await input.fill('   ');
     await input.press('Enter');
@@ -31,7 +31,7 @@ test.describe('Negative Flows', () => {
     await expect(page.locator('.footer')).not.toBeVisible();
   });
 
-  test('TC-012: Completed items are not counted in "items left"', async ({ page }) => {
+  test('TC-012: Completed items are not counted in "items left"', { tag: '@regression' }, async ({ page }) => {
     const input = page.getByPlaceholder('What needs to be done?');
     for (const item of TODO_ITEMS) {
       await input.fill(item);
@@ -45,7 +45,7 @@ test.describe('Negative Flows', () => {
     await expect(page.getByText('2 items left')).toBeVisible();
   });
 
-  test('TC-013: Active filter does not show completed items', async ({ page }) => {
+  test('TC-013: Active filter does not show completed items', { tag: '@regression' }, async ({ page }) => {
     const input = page.getByPlaceholder('What needs to be done?');
     for (const item of TODO_ITEMS) {
       await input.fill(item);
@@ -62,7 +62,7 @@ test.describe('Negative Flows', () => {
     await expect(page.getByText('Buy groceries')).not.toBeVisible();
   });
 
-  test('TC-014: Destroy button is not visible without hovering', async ({ page }) => {
+  test('TC-014: Destroy button is not visible without hovering', { tag: '@regression' }, async ({ page }) => {
     const input = page.getByPlaceholder('What needs to be done?');
     await input.fill('Buy groceries');
     await input.press('Enter');

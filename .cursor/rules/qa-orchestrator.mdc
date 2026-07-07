@@ -39,6 +39,7 @@ alwaysApply: false
 - `ci-failure-triage` — used by the `triage` agent to classify red runs
 - `self-heal` — locator drift repair after triage classifies **test issue (drift)**; POM-only, assertions unchanged
 - `jira-bug-reporter` — used by the `bug-reporter` agent when triage classifies **real app bug**
+- `eval-report` — **mandatory before Done** when heal/generation occurred or report is stale; refreshes `eval-report.md`
 
 ## Routing
 
@@ -135,8 +136,13 @@ For the one ticket the runner selected:
 
 ## Done
 
-**Single-ticket mode:** the suite is green for the ticket, a repair PR is open and linked to the run (human merges), or a bug is filed and linked.
+Before claiming **Done**, apply the `eval-report` skill when **any** trigger
+fired this session (heal PR, generation PR, red-run triage, or `eval-report.md`
+older than 14 days). Commit the refreshed `eval-report.md`. If no trigger,
+note `eval: skipped` in the summary.
 
-**Backlog mode:** PR opened and linked to the ticket, `tests-generated` label applied (unless stopped by repeated identical failure).
+**Single-ticket mode:** the suite is green for the ticket, a repair PR is open and linked to the run (human merges), or a bug is filed and linked — **and** eval step above satisfied.
 
-**Red-run heal mode:** triage complete; drift → repair PR linked to run (human merges); real app bug → Jira bug filed and linked (human approved filing).
+**Backlog mode:** PR opened and linked to the ticket, `tests-generated` label applied (unless stopped by repeated identical failure) — **and** eval step above satisfied.
+
+**Red-run heal mode:** triage complete; drift → repair PR linked to run (human merges); real app bug → Jira bug filed and linked (human approved filing) — **and** eval step above satisfied.
