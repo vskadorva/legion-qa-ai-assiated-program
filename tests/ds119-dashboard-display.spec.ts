@@ -6,7 +6,7 @@ import { ProgramsPage } from '../pages/programs.page';
 import { ValidationPage } from '../pages/validation.page';
 
 test.describe('Didaxis — Dashboard display (DS-119)', () => {
-  test('TC-001: Navigate to the Dashboard and see the right blocks', async ({ page }) => {
+  test('TC-001: Navigate to the Dashboard and see the right blocks', { tag: '@smoke' }, async ({ page }) => {
     const dashboard = new DashboardPage(page);
     await dashboard.goto();
 
@@ -18,7 +18,7 @@ test.describe('Didaxis — Dashboard display (DS-119)', () => {
     await expect(dashboard.cards.aiAssistCard).toBeVisible();
   });
 
-  test('TC-002: Programs card navigates to the Programs page', async ({ page }) => {
+  test('TC-002: Programs card navigates to the Programs page', { tag: '@sanity' }, async ({ page }) => {
     const dashboard = new DashboardPage(page);
     const programs = new ProgramsPage(page);
 
@@ -29,7 +29,7 @@ test.describe('Didaxis — Dashboard display (DS-119)', () => {
     await expect(programs.heading).toBeVisible();
   });
 
-  test('TC-003: Calendar card navigates to the Calendar page', async ({ page }) => {
+  test('TC-003: Calendar card navigates to the Calendar page', { tag: '@sanity' }, async ({ page }) => {
     const dashboard = new DashboardPage(page);
     const calendar = new CalendarPage(page);
 
@@ -40,7 +40,7 @@ test.describe('Didaxis — Dashboard display (DS-119)', () => {
     await expect(calendar.heading).toBeVisible();
   });
 
-  test('TC-004: Validation card navigates to the Validation page', async ({ page }) => {
+  test('TC-004: Validation card navigates to the Validation page', { tag: '@sanity' }, async ({ page }) => {
     const dashboard = new DashboardPage(page);
     const validation = new ValidationPage(page);
 
@@ -51,7 +51,7 @@ test.describe('Didaxis — Dashboard display (DS-119)', () => {
     await expect(validation.heading).toBeVisible();
   });
 
-  test('TC-005: AI Assist card navigates to the AI Assist page', async ({ page }) => {
+  test('TC-005: AI Assist card navigates to the AI Assist page', { tag: '@sanity' }, async ({ page }) => {
     const dashboard = new DashboardPage(page);
     const aiAssist = new AiAssistPage(page);
 
@@ -62,7 +62,7 @@ test.describe('Didaxis — Dashboard display (DS-119)', () => {
     await expect(aiAssist.heading).toBeVisible();
   });
 
-  test('TC-006: Sidebar Dashboard link restores dashboard blocks', async ({ page }) => {
+  test('TC-006: Sidebar Dashboard link restores dashboard blocks', { tag: '@sanity' }, async ({ page }) => {
     const dashboard = new DashboardPage(page);
     const programs = new ProgramsPage(page);
 

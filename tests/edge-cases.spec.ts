@@ -14,7 +14,7 @@ test.describe("Edge Cases", () => {
     await page.goto(APP_URL);
   });
 
-  test("TC-015: Special characters are preserved in todo text", async ({
+  test("TC-015: Special characters are preserved in todo text", { tag: '@regression' }, async ({
     page,
   }) => {
     const input = page.getByPlaceholder("What needs to be done?");
@@ -33,7 +33,7 @@ test.describe("Edge Cases", () => {
     expect(alerts).toHaveLength(0);
   });
 
-  test("TC-016: Duplicate todo items can be added", async ({ page }) => {
+  test("TC-016: Duplicate todo items can be added", { tag: '@regression' }, async ({ page }) => {
     const input = page.getByPlaceholder("What needs to be done?");
     await input.fill("Buy groceries");
     await input.press("Enter");
@@ -46,7 +46,7 @@ test.describe("Edge Cases", () => {
     await expect(todoItems.nth(1)).toContainText("Buy groceries");
   });
 
-  test("TC-017: Very long todo text is handled gracefully", async ({
+  test("TC-017: Very long todo text is handled gracefully", { tag: '@regression' }, async ({
     page,
   }) => {
     const input = page.getByPlaceholder("What needs to be done?");
@@ -64,7 +64,7 @@ test.describe("Edge Cases", () => {
     expect(boundingBox!.height).toBeGreaterThan(0);
   });
 
-  test('TC-018: "Mark all as complete" toggles all items at once', async ({
+  test('TC-018: "Mark all as complete" toggles all items at once', { tag: '@regression' }, async ({
     page,
   }) => {
     const input = page.getByPlaceholder("What needs to be done?");
@@ -86,7 +86,7 @@ test.describe("Edge Cases", () => {
     ).toBeVisible();
   });
 
-  test('TC-019: "Clear completed" removes all completed items', async ({
+  test('TC-019: "Clear completed" removes all completed items', { tag: '@regression' }, async ({
     page,
   }) => {
     const input = page.getByPlaceholder("What needs to be done?");
@@ -111,7 +111,7 @@ test.describe("Edge Cases", () => {
     ).not.toBeVisible();
   });
 
-  test("TC-020: Double-clicking a todo enables inline editing", async ({
+  test("TC-020: Double-clicking a todo enables inline editing", { tag: '@regression' }, async ({
     page,
   }) => {
     const input = page.getByPlaceholder("What needs to be done?");
@@ -126,7 +126,7 @@ test.describe("Edge Cases", () => {
     await expect(editInput).toHaveValue("Buy groceries");
   });
 
-  test("TC-021: Editing a todo and pressing Enter saves changes", async ({
+  test("TC-021: Editing a todo and pressing Enter saves changes", { tag: '@regression' }, async ({
     page,
   }) => {
     const input = page.getByPlaceholder("What needs to be done?");
@@ -144,7 +144,7 @@ test.describe("Edge Cases", () => {
     await expect(todoItem.getByRole("textbox")).not.toBeVisible();
   });
 
-  test("TC-022: Editing a todo and pressing Escape cancels changes", async ({
+  test("TC-022: Editing a todo and pressing Escape cancels changes", { tag: '@regression' }, async ({
     page,
   }) => {
     const input = page.getByPlaceholder("What needs to be done?");
@@ -161,7 +161,7 @@ test.describe("Edge Cases", () => {
     await expect(todoItem).toContainText("Buy groceries");
   });
 
-  test("TC-023: Editing a todo to empty string removes it", async ({
+  test("TC-023: Editing a todo to empty string removes it", { tag: '@regression' }, async ({
     page,
   }) => {
     const input = page.getByPlaceholder("What needs to be done?");
@@ -178,7 +178,7 @@ test.describe("Edge Cases", () => {
     await expect(page.getByTestId("todo-item")).toHaveCount(0);
   });
 
-  test("TC-024: Todo state persists after page refresh", async ({ page }) => {
+  test("TC-024: Todo state persists after page refresh", { tag: '@regression' }, async ({ page }) => {
     const input = page.getByPlaceholder("What needs to be done?");
     for (const item of TODO_ITEMS) {
       await input.fill(item);
@@ -198,7 +198,7 @@ test.describe("Edge Cases", () => {
     await expect(page.getByText("3 items left")).toBeVisible();
   });
 
-  test("TC-025: Leading and trailing whitespace is trimmed from todo text", async ({
+  test("TC-025: Leading and trailing whitespace is trimmed from todo text", { tag: '@regression' }, async ({
     page,
   }) => {
     const input = page.getByPlaceholder("What needs to be done?");

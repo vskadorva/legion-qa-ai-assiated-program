@@ -2,7 +2,7 @@ import { test, expect } from '../fixtures/cleanup.fixture';
 import { ProgramsPage } from '../pages/programs.page';
 
 test.describe('Didaxis — Delete Program with Confirmation (DS-4)', () => {
-  test('TC-001: Delete program after confirming in dialog (AC-1)', async ({ page }) => {
+  test('TC-001: Delete program after confirming in dialog (AC-1)', { tag: '@smoke' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Test Program ${Date.now()}`;
 
@@ -20,7 +20,7 @@ test.describe('Didaxis — Delete Program with Confirmation (DS-4)', () => {
     await expect(programs.programName(programName)).toHaveCount(0);
   });
 
-  test('TC-002: Cancel deletion keeps program in list (AC-2)', async ({ page }) => {
+  test('TC-002: Cancel deletion keeps program in list (AC-2)', { tag: '@e2e' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Retention Program ${Date.now()}`;
 
@@ -32,7 +32,7 @@ test.describe('Didaxis — Delete Program with Confirmation (DS-4)', () => {
     await expect(programs.deleteButtonFor(programName)).toBeVisible();
   });
 
-  test('TC-003: Delete control alone does not remove the program', async ({ page }) => {
+  test('TC-003: Delete control alone does not remove the program', { tag: '@e2e' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Guard Program ${Date.now()}`;
 
@@ -49,7 +49,7 @@ test.describe('Didaxis — Delete Program with Confirmation (DS-4)', () => {
     await expect(programs.programName(programName)).toBeVisible();
   });
 
-  test('TC-004: Deleting one program leaves other programs untouched', async ({ page }) => {
+  test('TC-004: Deleting one program leaves other programs untouched', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const suffix = Date.now();
     const alpha = `Alpha Track ${suffix}`;
@@ -64,7 +64,7 @@ test.describe('Didaxis — Delete Program with Confirmation (DS-4)', () => {
     await expect(programs.programName(beta)).toBeVisible();
   });
 
-  test('TC-005: Cancel then confirm still allows deletion', async ({ page }) => {
+  test('TC-005: Cancel then confirm still allows deletion', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Deferred Delete ${Date.now()}`;
 
@@ -76,7 +76,7 @@ test.describe('Didaxis — Delete Program with Confirmation (DS-4)', () => {
     await expect(programs.programName(programName)).toHaveCount(0);
   });
 
-  test('TC-006: Deleted program does not reappear after page refresh', async ({ page }) => {
+  test('TC-006: Deleted program does not reappear after page refresh', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Ephemeral Program ${Date.now()}`;
 

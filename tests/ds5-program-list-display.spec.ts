@@ -7,7 +7,7 @@ import {
 } from '../support/mock-programs-api';
 
 test.describe('Didaxis — Program List Display (DS-5)', () => {
-  test('TC-001: Display program list with key details (AC-1)', async ({ page }) => {
+  test('TC-001: Display program list with key details (AC-1)', { tag: '@smoke' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Web Development 2026 ${Date.now()}`;
     const description = 'Full-stack web development program';
@@ -22,7 +22,7 @@ test.describe('Didaxis — Program List Display (DS-5)', () => {
     await expect(programs.deleteButtonFor(programName)).toBeVisible();
   });
 
-  test('TC-002: Multiple programs each show name and description (AC-1)', async ({ page }) => {
+  test('TC-002: Multiple programs each show name and description (AC-1)', { tag: '@e2e' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const suffix = Date.now();
     const csName = `Computer Science BSc ${suffix}`;
@@ -44,7 +44,7 @@ test.describe('Didaxis — Program List Display (DS-5)', () => {
     await expect(programs.deleteButtonFor(nursingName)).toBeVisible();
   });
 
-  test('TC-003: Empty state when no programs exist (AC-2)', async ({ page }) => {
+  test('TC-003: Empty state when no programs exist (AC-2)', { tag: '@api' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
 
     await mockEmptyProgramsList(page);
@@ -56,7 +56,7 @@ test.describe('Didaxis — Program List Display (DS-5)', () => {
     await expect(programs.programDataRows()).toHaveCount(0);
   });
 
-  test('TC-004: Empty-state Create Program button opens the new program modal (AC-2)', async ({
+  test('TC-004: Empty-state Create Program button opens the new program modal (AC-2)', { tag: '@api' }, async ({
     page,
   }) => {
     const programs = new ProgramsPage(page);
@@ -71,7 +71,7 @@ test.describe('Didaxis — Program List Display (DS-5)', () => {
     await expect(modal.descriptionInput).toBeVisible();
   });
 
-  test('TC-005: Programs page does not show stale data after last program is deleted', async ({
+  test('TC-005: Programs page does not show stale data after last program is deleted', { tag: '@api' }, async ({
     page,
   }) => {
     const programs = new ProgramsPage(page);
@@ -85,7 +85,7 @@ test.describe('Didaxis — Program List Display (DS-5)', () => {
     await expect(programs.programName(programName)).toHaveCount(0);
   });
 
-  test('TC-006: Empty state is not shown when programs exist', async ({ page }) => {
+  test('TC-006: Empty state is not shown when programs exist', { tag: '@e2e' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `Active Catalog Program ${Date.now()}`;
 
@@ -97,7 +97,7 @@ test.describe('Didaxis — Program List Display (DS-5)', () => {
     await expect(programs.programColumnHeader).toBeVisible();
   });
 
-  test('TC-007: Program with long name and description displays in the list', async ({ page }) => {
+  test('TC-007: Program with long name and description displays in the list', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const programName = `${Date.now()}-${'A'.repeat(80)}`.slice(0, 100);
     const description =
@@ -109,7 +109,7 @@ test.describe('Didaxis — Program List Display (DS-5)', () => {
     await expect(programs.programDescription(programName, description)).toBeVisible();
   });
 
-  test('TC-008: Program with special characters in name and description displays correctly', async ({
+  test('TC-008: Program with special characters in name and description displays correctly', { tag: '@regression' }, async ({
     page,
   }) => {
     const programs = new ProgramsPage(page);
@@ -123,7 +123,7 @@ test.describe('Didaxis — Program List Display (DS-5)', () => {
     await expect(programs.programDescription(programName, description)).toBeVisible();
   });
 
-  test('TC-009: Navigating to Programs via sidebar shows the same list', async ({ page }) => {
+  test('TC-009: Navigating to Programs via sidebar shows the same list', { tag: '@e2e' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
     const dashboard = new DashboardPage(page);
     const suffix = Date.now();
@@ -143,7 +143,7 @@ test.describe('Didaxis — Program List Display (DS-5)', () => {
     await expect(programs.programDescription(beta, 'Second program visible after sidebar navigation')).toBeVisible();
   });
 
-  test('TC-010: Programs page accessibility: list region is keyboard reachable', async ({
+  test('TC-010: Programs page accessibility: list region is keyboard reachable', { tag: '@regression' }, async ({
     page,
   }) => {
     // @axe-core/playwright is not installed — add it to enable the WCAG 2.0 A/AA axe scan.

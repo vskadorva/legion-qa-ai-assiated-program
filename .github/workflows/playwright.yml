@@ -3,13 +3,14 @@ name: Playwright Tests
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   test:
-    name: Run Playwright tests
+    name: Playwright — ${{ github.event_name == 'push' && 'sanity' || github.event_name == 'pull_request' && 'smoke' || 'regression (full suite)' }}
     runs-on: ubuntu-latest
     environment: dev1
-    timeout-minutes: 30
+    timeout-minutes: ${{ github.event_name == 'workflow_dispatch' && 60 || 30 }}
     env:
       DIDAXIS_URL: ${{ secrets.DIDAXIS_URL }}
       DIDAXIS_EMAIL: ${{ secrets.DIDAXIS_EMAIL }}
@@ -29,15 +30,33 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps chromium
+
+      - name: Select test slice
+        id: slice
+        run: |
+          case "${{ github.event_name }}" in
+            push)
+              echo "command=npm run test:sanity" >> "$GITHUB_OUTPUT"
+              echo "artifact=sanity" >> "$GITHUB_OUTPUT"
+              ;;
+            pull_request)
+              echo "command=npm run test:smoke" >> "$GITHUB_OUTPUT"
+              echo "artifact=smoke" >> "$GITHUB_OUTPUT"
+              ;;
+            workflow_dispatch)
+              echo "command=npx playwright test" >> "$GITHUB_OUTPUT"
+              echo "artifact=regression" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
 
       - name: Run Playwright tests
-        run: npx playwright test
+        run: ${{ steps.slice.outputs.command }}
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: playwright-report-${{ steps.slice.outputs.artifact }}
           path: playwright-report/
           retention-days: 30
