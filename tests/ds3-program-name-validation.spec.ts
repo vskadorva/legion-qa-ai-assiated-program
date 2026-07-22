@@ -1,5 +1,10 @@
 import { test, expect } from '../fixtures/cleanup.fixture';
 import { ProgramsPage } from '../pages/programs.page';
+import { buildProgramName, buildProgramPayload } from '../test-data/factories/program.factory';
+import {
+  DUPLICATE_NAME_SCENARIO,
+  INVALID_PROGRAM_NAMES,
+} from '../test-data/invalid-program-names';
 
 test.describe('Didaxis — Program Name Validation (DS-3)', () => {
   test('TC-001: Whitespace-only Program Name keeps Create disabled (AC-1)', { tag: '@sanity' }, async ({ page }) => {
@@ -8,7 +13,7 @@ test.describe('Didaxis — Program Name Validation (DS-3)', () => {
     await programs.openNewProgram();
 
     const modal = programs.newProgramModal;
-    await modal.fillProgramName('   ');
+    await modal.fillProgramName(INVALID_PROGRAM_NAMES.whitespaceOnly);
     await modal.fillDescription('Optional description for whitespace guard');
 
     await expect(modal.createButton).toBeDisabled();
@@ -17,28 +22,30 @@ test.describe('Didaxis — Program Name Validation (DS-3)', () => {
 
   test('TC-002: Program Name with special characters is accepted (AC-2)', { tag: '@e2e' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
-    const programName = `Informatique & IA - Niveau 2 ${Date.now()}`;
+    const { name, description } = buildProgramPayload({
+      name: buildProgramName('Informatique & IA - Niveau 2'),
+      description: 'French-language computing and AI track',
+    });
 
-    await programs.createProgram(programName, 'French-language computing and AI track');
+    await programs.createProgram(name, description);
 
     await expect(programs.newProgramModal.dialog).not.toBeVisible();
-    await expect(programs.programName(programName)).toBeVisible();
+    await expect(programs.programName(name)).toBeVisible();
   });
 
   test('TC-003: Duplicate Program Name on create is rejected (AC-3)', { tag: '@regression' }, async ({ page }) => {
     test.skip(true, 'Known demo bug — duplicate program names are allowed on create without an error message.');
 
     const programs = new ProgramsPage(page);
-    const suffix = Date.now();
-    const seedName = `Web Development 2026 ${suffix}`;
+    const seedName = buildProgramName('Web Development 2026');
 
-    await programs.createProgram(seedName, 'Original full-stack curriculum');
+    await programs.createProgram(seedName, DUPLICATE_NAME_SCENARIO.seedDescription);
 
     await programs.goto();
     await programs.openNewProgram();
 
     const modal = programs.newProgramModal;
-    await modal.fill(seedName, 'Second program with the same title');
+    await modal.fill(seedName, DUPLICATE_NAME_SCENARIO.conflictDescription);
     await modal.submit();
 
     await expect(modal.dialog).toBeVisible({ timeout: 5000 });
@@ -52,6 +59,7 @@ test.describe('Didaxis — Program Name Validation (DS-3)', () => {
     await programs.openNewProgram();
 
     const modal = programs.newProgramModal;
+    await modal.fillProgramName(INVALID_PROGRAM_NAMES.empty);
     await modal.fillDescription('Description without a program name');
 
     await expect(modal.createButton).toBeDisabled();
@@ -64,17 +72,16 @@ test.describe('Didaxis — Program Name Validation (DS-3)', () => {
     await programs.openNewProgram();
 
     const modal = programs.newProgramModal;
-    await modal.fillProgramName('Draft Holding Name');
+    await modal.fillProgramName(buildProgramName('Draft Holding'));
     await expect(modal.createButton).toBeEnabled();
 
-    await modal.fillProgramName('');
+    await modal.fillProgramName(INVALID_PROGRAM_NAMES.empty);
     await expect(modal.createButton).toBeDisabled();
   });
 
   test('TC-006: Leading and trailing whitespace is trimmed on create', { tag: '@regression' }, async ({ page }) => {
     const programs = new ProgramsPage(page);
-    const token = Date.now();
-    const trimmedName = `Web Development Trim ${token}`;
+    const trimmedName = buildProgramName('Web Development Trim');
     const spacedName = `  ${trimmedName}  `;
 
     await programs.goto();
@@ -95,8 +102,7 @@ test.describe('Didaxis — Program Name Validation (DS-3)', () => {
     test.skip(true, 'Known demo bug — duplicate program names are allowed on create without an error message.');
 
     const programs = new ProgramsPage(page);
-    const suffix = Date.now();
-    const seedName = `Duplicate Guard ${suffix}`;
+    const seedName = buildProgramName('Duplicate Guard');
 
     await programs.createProgram(seedName, 'Seed program for duplicate guard');
 
