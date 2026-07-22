@@ -67,7 +67,7 @@ test.describe('Didaxis — Dashboard display (DS-119)', () => {
     const programs = new ProgramsPage(page);
 
     await programs.goto();
-    await dashboard.navigation.dashboardButton.click();
+    await dashboard.navigation.goToDashboard();
 
     await expect(page).toHaveURL(/\/$/);
     await expect(dashboard.heading).toBeVisible();
